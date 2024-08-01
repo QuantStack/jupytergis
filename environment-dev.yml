@@ -3,4 +3,8 @@ channels:
   - conda-forge
 dependencies:
   - pip
+  - yarn=3
+  - jupyterlab
+  - pytest
   - qgis
+  - dirty-equals

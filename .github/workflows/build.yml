@@ -72,6 +72,7 @@ jobs:
           path: |
             python/jupytergis_core/dist/jupytergis*
             python/jupytergis_lab/dist/jupytergis*
+            python/jupytergis_qgis/dist/jupytergis*
           if-no-files-found: error
 
   test_isolated:
@@ -97,7 +98,7 @@ jobs:
           sudo rm -rf $(which node)
           sudo rm -rf $(which node)
 
-          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl .
+          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl ./jupytergis_qgis/dist/jupytergis*.whl .
           python -m pip install "jupyterlab>=4.0.0" jupytergis*.whl
 
           jupyter labextension list
@@ -126,6 +127,8 @@ jobs:
           create-args: >-
             python=3.9
             jupyterlab
+            ipywidgets
+            qgis
 
       - name: Download extension package
         uses: actions/download-artifact@v3
@@ -136,7 +139,7 @@ jobs:
         shell: bash -l {0}
         run: |
           set -eux
-          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl .
+          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl ./jupytergis_qgis/dist/jupytergis*.whl .
           python -m pip install jupytergis*.whl
 
       - name: Install dependencies
@@ -234,7 +237,7 @@ jobs:
         shell: bash -l {0}
         run: |
           set -eux
-          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl .
+          cp ./jupytergis_core/dist/jupytergis*.whl ./jupytergis_lab/dist/jupytergis*.whl ./jupytergis_qgis/dist/jupytergis*.whl .
           python -m pip install jupytergis*.whl
 
       - name: Build the lite site
