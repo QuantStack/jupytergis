@@ -1,3 +1,7 @@
+import Protobuf from 'pbf';
+
+import { VectorTile } from '@mapbox/vector-tile';
+
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 import * as d3Color from 'd3-color';
@@ -211,4 +215,28 @@ export function createDefaultLayerRegistry(
       }
     };
   }
+}
+
+export async function getSourceLayerNames(
+  tileUrl: string,
+  urlParameters?: IDict<string>
+) {
+  tileUrl = tileUrl.replace('{x}', '0').replace('{y}', '0').replace('{z}', '0');
+  if (urlParameters) {
+    for (const param of Object.keys(urlParameters)) {
+      tileUrl = tileUrl.replace(`{${param}}`, urlParameters[param]);
+    }
+  }
+
+  const response = await fetch(tileUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch tile: ${response.statusText}`);
+  }
+  const arrayBuffer = await response.arrayBuffer();
+
+  const tile = new VectorTile(new Protobuf(arrayBuffer));
+
+  const layerNames = Object.keys(tile.layers);
+
+  return layerNames;
 }

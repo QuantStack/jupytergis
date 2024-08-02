@@ -13,7 +13,7 @@ from ypywidgets.comm import CommWidget
 
 from uuid import uuid4
 
-from .utils import normalize_path
+from .utils import normalize_path, get_source_layer_names
 
 from .objects import (
     LayerType,
@@ -126,7 +126,7 @@ class GISDocument(CommWidget):
             "parameters": {"source": source_id, "opacity": opacity},
         }
 
-        self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
+        return self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
 
     def add_vectortile_layer(
         self,
@@ -149,6 +149,12 @@ class GISDocument(CommWidget):
         :param attribution: The attribution.
         :param opacity: The opacity, between 0 and 1.
         """
+        source_layers = get_source_layer_names(url)
+        if source_layer is None and len(source_layers) == 1:
+            source_layer = source_layers[0]
+        if source_layer not in source_layers:
+            raise ValueError(f'source_layer should be one of {source_layers}')
+
         source = {
             "type": SourceType.VectorTileSource,
             "name": f"{name} Source",
@@ -180,7 +186,7 @@ class GISDocument(CommWidget):
             },
         }
 
-        self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
+        return self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
 
     def add_geojson_layer(
         self,
@@ -238,7 +244,7 @@ class GISDocument(CommWidget):
             },
         }
 
-        self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
+        return self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
 
     def add_image_layer(
         self,
@@ -277,7 +283,7 @@ class GISDocument(CommWidget):
             "parameters": {"source": source_id, "opacity": opacity},
         }
 
-        self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
+        return self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
 
     def add_video_layer(
         self,
@@ -316,7 +322,7 @@ class GISDocument(CommWidget):
             "parameters": {"source": source_id, "opacity": opacity},
         }
 
-        self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
+        return self._add_layer(OBJECT_FACTORY.create_layer(layer, self))
 
     def _add_source(self, new_object: "JGISObject"):
         _id = str(uuid4())
