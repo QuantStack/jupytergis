@@ -4,10 +4,11 @@ import { ISignal, Signal } from '@lumino/signaling';
 import * as Y from 'yjs';
 
 import {
+  IJGISFilterItem,
   IJGISLayer,
   IJGISLayerItem,
-  IJGISLayers,
   IJGISLayerTree,
+  IJGISLayers,
   IJGISOptions,
   IJGISSource,
   IJGISSources,
@@ -34,6 +35,8 @@ export class JupyterGISDoc
     this._layerTree = this.ydoc.getArray<IJGISLayerItem>('layerTree');
     this._sources = this.ydoc.getMap<Y.Map<any>>('sources');
     this._terrain = this.ydoc.getMap<IJGISTerrain>('terrain');
+    this._filters = this.ydoc.getArray<IJGISFilterItem>('filters');
+
     this.undoManager.addToScope(this._layers);
     this.undoManager.addToScope(this._sources);
     this.undoManager.addToScope(this._layerTree);
@@ -180,6 +183,12 @@ export class JupyterGISDoc
       if (item) {
         this._layerTree.insert(index, [item]);
       }
+    });
+  }
+
+  addFilterItem(item: IJGISFilterItem) {
+    this.transact(() => {
+      this._filters.insert(this._filters.length - 1, [item]);
     });
   }
 
@@ -336,6 +345,7 @@ export class JupyterGISDoc
   private _sources: Y.Map<any>;
   private _options: Y.Map<any>;
   private _terrain: Y.Map<IJGISTerrain>;
+  private _filters: Y.Array<IJGISFilterItem>;
 
   private _optionsChanged = new Signal<IJupyterGISDoc, MapChange>(this);
   private _layersChanged = new Signal<IJupyterGISDoc, IJGISLayerDocChange>(
@@ -348,6 +358,5 @@ export class JupyterGISDoc
   private _sourcesChanged = new Signal<IJupyterGISDoc, IJGISSourceDocChange>(
     this
   );
-
   private _terrainChanged = new Signal<IJupyterGISDoc, IJGISTerrain>(this);
 }

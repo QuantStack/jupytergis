@@ -2,6 +2,7 @@ import { MapChange } from '@jupyter/ydoc';
 import {
   IHillshadeLayer,
   IImageSource,
+  IJGISFilterItem,
   IJGISLayer,
   IJGISLayerDocChange,
   IJGISLayerTreeDocChange,
@@ -184,7 +185,7 @@ export class MainView extends React.Component<IProps, IStates> {
             minzoom: parameters.minZoom,
             maxzoom: parameters.maxZoom,
             attribution: parameters.attribution || '',
-            tiles: [this.computeSourceUrl(source)]
+            url: this.computeSourceUrl(source)
           });
         }
         break;
@@ -646,6 +647,10 @@ export class MainView extends React.Component<IProps, IStates> {
         );
       }
     }
+
+    if (layer.filters) {
+      this.setFilters(id, layer.filters);
+    }
   }
 
   /**
@@ -761,6 +766,22 @@ export class MainView extends React.Component<IProps, IStates> {
 
   private _onTerrainChange(sender: any, change: IJGISTerrain) {
     this.setTerrain(change.source, change.exaggeration);
+  }
+
+  private async setFilters(id: string, filters: IJGISFilterItem[]) {
+    if (filters.length === 0) {
+      this._Map.setFilter(id, null);
+      return;
+    }
+
+    const filterExpression = [
+      'all',
+      ...filters.map(id => [id.operator, id.feature, id.value])
+    ] as MapLibre.FilterSpecification;
+
+    console.log('filterExpression', filterExpression);
+
+    this._Map.setFilter(id, filterExpression);
   }
 
   // @ts-ignore
