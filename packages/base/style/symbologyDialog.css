@@ -27,6 +27,26 @@
   max-width: 50%;
 }
 
+.jp-gis-color-ramp-div {
+  display: flex;
+  flex: 1 1 50%;
+  max-width: 50%;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.jp-gis-color-ramp-div > .jp-select-wrapper {
+  flex: 1 0 40%;
+}
+
+.jp-gis-color-ramp-div:last-child {
+  flex-shrink: 0;
+}
+
+.jp-gis-color-ramp-div > input {
+  max-width: 25%;
+}
+
 .jp-gis-band-container {
   display: flex;
   flex-direction: column;
@@ -43,6 +63,12 @@
 
 .jp-gis-layer-symbology-container .jp-select-wrapper {
   margin-bottom: unset;
+}
+
+.jp-gis-color-ramp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
 }
 
 .jp-gis-band-container .jp-gis-symbology-row:last-child {
@@ -119,4 +145,80 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: absolute;
+  /* box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); */
+  overflow: hidden;
+  visibility: hidden;
+  z-index: 40;
+  flex: 1 1 auto;
+  width: 100%;
+  /* font-size: var(--jp-ui-font-size2); */
+  background: var(--jp-input-background);
+  padding: 0 25px 0 8px;
+  border: var(--jp-border-width) solid var(--jp-input-border-color);
+  border-radius: 0;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.open {
+  visibility: visible;
+}
+
+.dropdown-header {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown > jp-gis-color-ramp-entry:hover {
+  background-color: #f1f1f1;
+}
+
+.jp-gis-color-ramp-entry {
+  display: flex;
+  align-items: center;
+  /* flex: 1 1 auto; */
+  /* width: 100%; */
+  font-size: var(--jp-ui-font-size2);
+  /* background: var(--jp-input-background); */
+  color: var(--jp-ui-font-color0);
+  /* padding: 0 25px 0 8px; */
+  /* border: var(--jp-border-width) solid var(--jp-input-border-color); */
+  /* border-radius: 0; */
+  /* outline: none; */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.jp-gis-color-label {
+  position: absolute;
+}
+
+.jp-gis-color-canvas {
+  margin: 0 -7px;
+  border-radius: 8px;
+  width: 99%;
 }
